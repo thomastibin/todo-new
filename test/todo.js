@@ -1,22 +1,36 @@
-const TodoList = artifacts.require('./TodoList.sol')
+const Todo = artifacts.require("TodoList");
 
-contract('TodoList', (accounts) => {
-  before(async () => {
-    this.todoList = await TodoList.deployed()
-  })
+/*
+ * uncomment accounts to access the test accounts made available by the
+ * Ethereum client
+ * See docs: https://www.trufflesuite.com/docs/truffle/testing/writing-tests-in-javascript
+ */
+contract("Todo", function (/* accounts */) {
+  it("should assert true", async function () {
+    this.todoList = await Todo.deployed();
+    console.log('this.todoList: ', this.todoList.address);
+    return assert.isTrue(true);
 
- 
-  it('lists tasks', async () => {
-    const taskCount = await this.todoList.taskCount()
-    const task = await this.todoList.tasks(1)
-    assert.equal(task.id.toNumber(), 1)
-    assert.equal(task.content, 'TASK 1')
-    assert.equal(task.completed, false)
+  });
+
+  it("check taskcount", async function () {
+    let taskCount = await this.todoList.taskCount()
+
     assert.equal(taskCount.toNumber(), 1)
-  })
 
 
+  });
 
- 
+  it("insert new task", async function () {
+    await this.todoList.creatTask("Task2")
 
-})
+  });
+
+  it("check new task", async function () {
+    let task = await this.todoList.Tasks(2)
+    console.log('task: ', task);
+    assert.equal("Task2", task.content)
+
+  });
+
+});
